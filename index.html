@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="it">
 <head>
@@ -362,23 +363,25 @@
       font-family: "Circular", ui-sans-serif, system-ui;
     }
     .overlay.show{ display:flex; }
+
+    /* UPDATED: more spacing in modal */
     .modal{
       width:min(460px, calc(100% - 32px));
       border-radius:18px;
       border:1px solid rgba(255,253,250,0.14);
       background: linear-gradient(180deg, rgba(255,253,250,0.06) 0%, rgba(1,41,0,0.88) 100%);
       box-shadow: 0 18px 60px rgba(0,0,0,.45);
-      padding:18px;
+      padding:24px; /* was 18px */
       text-align:center;
       color: var(--cream);
     }
     .modal h2{
-      margin:0 0 6px;
+      margin:0 0 10px; /* was 0 0 6px */
       font-family: "Reckless", ui-serif, Georgia, "Times New Roman", Times, serif;
       font-weight:400;
     }
     .modal p{
-      margin:0 0 14px;
+      margin:0 0 18px; /* was 0 0 14px */
       font-size:13px;
       color: rgba(255,253,250,0.75);
       line-height:1.5;
@@ -386,10 +389,12 @@
     .modal .row{
       display:flex;
       justify-content:center;
-      gap:10px;
+      gap:12px; /* was 10px */
       flex-wrap:wrap;
       align-items:center;
+      margin-top:6px; /* extra breathing room */
     }
+
     body.game-mode .btnPrimary{
       background: var(--lime);
       color: var(--ink);
@@ -398,6 +403,26 @@
       background: rgba(255,253,250,0.12);
       color: var(--cream);
     }
+
+    /* NEW: secondary white button (always different from lime) */
+    .btnSecondary{
+      border:1px solid rgba(255,253,250,0.28);
+      background: rgba(255,253,250,0.92);
+      color: var(--ink);
+      font-weight:700;
+      font-size:13px;
+      padding:12px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      transition: background .18s ease, color .18s ease, transform .05s ease, border-color .18s ease;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .btnSecondary:hover{
+      background: rgba(255,253,250,0.12);
+      color: var(--cream);
+      border-color: rgba(197,255,91,0.28);
+    }
+    .btnSecondary:active{ transform: translateY(1px); }
   </style>
 </head>
 
@@ -548,7 +573,7 @@
             <p id="overlayText">—</p>
             <div class="row">
               <button class="btnPrimary" id="restartBtn" type="button">Play Again</button>
-              <button class="btnPrimary" id="pickBtn" type="button">Pick Another Tower</button>
+              <button class="btnSecondary" id="pickBtn" type="button">Pick Another Tower</button>
             </div>
           </div>
         </div>
@@ -717,14 +742,11 @@
         ? `You built ${level.target} floors. Perfect: ${G.perfect}.`
         : `Floors: ${Math.max(0, G.blocks.length - 1)}. Perfect: ${G.perfect}.`;
 
-      // Pick button: primary on win, underlined text on lose
-      if (win) {
-        pickBtn.classList.remove("btnLink");
-        pickBtn.classList.add("btnPrimary");
-      } else {
-        pickBtn.classList.remove("btnPrimary");
-        pickBtn.classList.add("btnLink");
-      }
+      // UPDATED: always keep CTAs different (lime + white)
+      restartBtn.classList.remove("btnLink", "btnSecondary", "btnPrimary");
+      pickBtn.classList.remove("btnLink", "btnSecondary", "btnPrimary");
+      restartBtn.classList.add("btnPrimary");    // acid green
+      pickBtn.classList.add("btnSecondary");     // white
 
       showOverlay();
       draw();
@@ -895,3 +917,4 @@
   </script>
 </body>
 </html>
+```
