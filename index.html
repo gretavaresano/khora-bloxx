@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Khôra • Tower Bloxx 404</title>
+
+  <style>
+    :root{
+      --ink:#181818;
+      --paper:#FFFDFA;
+      --line:#E8E3DB;
+
+      --card:#FAF5EF;
+
+      --bg:#012900;
+      --cream:#FFFDFA;
+
+      --lime:#C5FF5B;
+      --lime2:#b3ee4a;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: "Circular", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--paper);
+      color: var(--ink);
+      overflow:hidden;
+    }
+
+    /* ======================
+       FONTS (replace paths)
+    ====================== */
+    @font-face {
+      font-family: "Circular";
+      src: url("/fonts/circular-book.otf");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Circular";
+      src: url("/fonts/circular-bold.otf");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Reckless";
+      src: url("/fonts/reckless.otf");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* When game is active */
+    body.game-mode{
+      background: var(--bg);
+      color: var(--cream);
+    }
+
+    /* Header */
+    .header{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:32px 16px;
+      border-bottom:1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+    }
+    body.game-mode .header{
+      background: var(--bg);
+      border-bottom:1px solid rgba(255,253,250,0.14);
+      color: var(--cream);
+    }
+    .logoSvg{
+      display:block;
+      height:30px;
+      width:auto;
+    }
+
+    /* Views */
+    .view{
+      height:calc(100% - 97px); /* header approx */
+      display:none;
+    }
+    .view.active{display:flex;}
+
+    /* 404 / Select view */
+    .select{
+      width:100%;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 16px 40px;
+      text-align:center;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .title404{
+      font-family: "Reckless", ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight:400;
+      font-size: clamp(64px, 12vw, 120px);
+      line-height:1;
+      color: var(--ink);
+      margin:0 0 24px; /* +24px below title */
+      letter-spacing:-0.02em;
+    }
+
+    .subtitle{
+      margin:0 auto 24px; /* +24px below subtitle block */
+      max-width:620px;
+      font-family: "Reckless", ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight:400;
+      font-size:18px;
+      line-height:1.5;
+      color: color-mix(in oklab, var(--ink) 92%, transparent);
+    }
+
+    /* Replaces pill */
+    .towerTitle{
+      margin:24px 0 18px; /* +24px above tower title */
+      font-size:13px;
+      font-weight:700; /* circular bold */
+      letter-spacing:0.02em;
+      color: var(--ink); /* black */
+      user-select:none;
+    }
+
+    .cards{
+      width:100%;
+      max-width: 900px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:16px;
+      padding: 0 8px;
+    }
+    @media (max-width: 720px){
+      .cards{grid-template-columns: 1fr; max-width: 520px;}
+    }
+
+    /* Cards */
+    .card{
+      appearance:none;
+      border:1px solid var(--line);
+      background: var(--card);
+      border-radius:18px;
+      padding:28px 18px 22px;
+      cursor:pointer;
+      transition: transform .22s ease;
+      box-shadow:none;
+      color: var(--ink);
+      text-align:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+    }
+
+    .iconWrap{
+      height:150px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      margin-bottom:14px;
+      transition: transform .22s ease;
+    }
+    .card:hover .iconWrap{ transform: scale(1.05); }
+
+    .badge{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      margin-bottom:10px;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+
+    .cardTitle{
+      margin:0;
+      font-family: "Reckless", ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight:400;
+      font-size:18px;
+      color: var(--ink);
+    }
+    .cardMeta{
+      margin:6px 0 0;
+      font-size:12px;
+      line-height:1.5;
+      color: color-mix(in oklab, var(--ink) 70%, transparent);
+    }
+
+    .footerRow{
+      margin-top:20px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .footerHint{
+      color: color-mix(in oklab, var(--ink) 45%, transparent);
+      font-size:12px;
+      margin:0;
+    }
+
+    /* Buttons (light background spec) */
+    .btnPrimary{
+      border:none;
+      background: var(--lime);
+      color: var(--ink);
+      font-weight:700;
+      font-size:13px;
+      padding:12px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      transition: background .18s ease, color .18s ease, transform .05s ease;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .btnPrimary:hover{
+      background: var(--bg);
+      color: var(--cream);
+    }
+    .btnPrimary:active{ transform: translateY(1px); }
+
+    /* Underlined link button (used for Pick on lose) */
+    .btnLink{
+      border:none;
+      background:transparent;
+      padding:0;
+      font: inherit;
+      font-weight:600;
+      color: rgba(255,253,250,0.82);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor:pointer;
+      transition: color .18s ease;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .btnLink:hover{
+      color: rgba(255,253,250,1);
+    }
+
+    /* Game view */
+    .game{
+      width:100%;
+      flex-direction:column;
+      overflow:hidden;
+      background: var(--bg);
+      color: var(--cream);
+    }
+
+    .gameStage{
+      flex: 1 1 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 26px 16px 22px;
+    }
+
+    .panel{
+      width:min(980px, 100%);
+      height:min(560px, calc(100vh - 210px));
+      border-radius:18px;
+      border:1px solid rgba(197,255,91,0.10);
+      background: var(--bg); /* Game Canvas bg perfect */
+      box-shadow: 0 18px 60px rgba(0,0,0,.38);
+      position:relative;
+      overflow:hidden;
+    }
+
+    canvas{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+
+    /* HUD */
+    .hud{
+      position:absolute;
+      inset: 14px 14px auto 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      pointer-events:none;
+      z-index:4;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .hudLeft, .hudRight{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      pointer-events:none;
+    }
+    .hudRight{ align-items:flex-end; }
+
+    .hudChip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,253,250,0.14);
+      background: rgba(1,41,0,0.55);
+      backdrop-filter: blur(6px);
+      font-size:12px;
+      color: rgba(255,253,250,0.86);
+      width:max-content;
+      pointer-events:none;
+    }
+    .hudChip b{
+      color: rgba(197,255,91,0.95);
+      font-weight:800;
+    }
+
+    /* Back button in bottom-right */
+    .backBtn{
+      position:absolute;
+      bottom:14px;
+      right:14px;
+      top:auto;
+      left:auto;
+
+      border:none;
+      background: rgba(255,253,250,0.08);
+      color: rgba(255,253,250,0.88);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      padding:10px 12px;
+      border-radius:12px;
+      transition: background .18s ease, color .18s ease, transform .05s ease;
+      z-index:6;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .backBtn:hover{
+      background: rgba(197,255,91,0.14);
+      color: var(--lime);
+    }
+    .backBtn:active{ transform: translateY(1px); }
+    .backBtn svg{ display:block }
+
+    /* Overlay */
+    .overlay{
+      position:absolute;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(1,41,0,0.55);
+      backdrop-filter: blur(6px);
+      z-index:10;
+      font-family: "Circular", ui-sans-serif, system-ui;
+    }
+    .overlay.show{ display:flex; }
+    .modal{
+      width:min(460px, calc(100% - 32px));
+      border-radius:18px;
+      border:1px solid rgba(255,253,250,0.14);
+      background: linear-gradient(180deg, rgba(255,253,250,0.06) 0%, rgba(1,41,0,0.88) 100%);
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
+      padding:18px;
+      text-align:center;
+      color: var(--cream);
+    }
+    .modal h2{
+      margin:0 0 6px;
+      font-family: "Reckless", ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight:400;
+    }
+    .modal p{
+      margin:0 0 14px;
+      font-size:13px;
+      color: rgba(255,253,250,0.75);
+      line-height:1.5;
+    }
+    .modal .row{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    body.game-mode .btnPrimary{
+      background: var(--lime);
+      color: var(--ink);
+    }
+    body.game-mode .btnPrimary:hover{
+      background: rgba(255,253,250,0.12);
+      color: var(--cream);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header: logo only, centered -->
+  <header class="header" aria-label="Khôra header">
+    <!-- Inline SVG with currentColor so it flips in game-mode -->
+    <svg class="logoSvg" viewBox="0 0 109 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Khôra">
+      <path d="M17.16 28.96L9.52 17.8L6.32 21.36V28.96H0V0.599999H6.32V12.52L16.68 0.599999H25L13.96 12.88L25.04 28.96H17.16Z" fill="currentColor"/>
+      <path d="M34.1956 17.28V28.96H28.1156V0H34.1956V10.36C35.4356 9.12 37.5156 8.56 39.2756 8.56C44.4756 8.56 46.7956 12.12 46.7956 16.48V28.96H40.7156V17.52C40.7156 15.56 39.6756 14.08 37.4756 14.08C35.5556 14.08 34.3156 15.44 34.1956 17.28Z" fill="currentColor"/>
+      <path d="M58.2247 6.72H53.7047L58.2247 0.680001H63.9447L68.5047 6.72H63.8647L61.0247 3.88L58.2247 6.72ZM61.0247 23.96C63.3447 23.96 65.5047 22.36 65.5047 19C65.5047 15.64 63.3447 14.08 61.0247 14.08C58.7447 14.08 56.5447 15.64 56.5447 19C56.5447 22.32 58.7447 23.96 61.0247 23.96ZM61.0247 8.48C66.9847 8.48 71.5847 12.84 71.5847 19C71.5847 25.16 66.9847 29.56 61.0247 29.56C55.1047 29.56 50.4647 25.16 50.4647 19C50.4647 12.84 55.1047 8.48 61.0247 8.48Z" fill="currentColor"/>
+      <path d="M88.1384 9.08V15.08C87.4584 14.92 86.8184 14.88 86.2184 14.88C83.7784 14.88 81.5784 16.32 81.5784 20.28V28.96H75.4984V9.08H81.3784V11.76C82.4184 9.52 84.9384 8.88 86.5384 8.88C87.1384 8.88 87.7384 8.96 88.1384 9.08Z" fill="currentColor"/>
+      <path d="M90.7828 23.48C90.7828 19.96 93.3828 17.96 96.6628 17.48L101.343 16.76C102.423 16.6 102.783 16.08 102.783 15.4C102.783 14.24 101.783 13.24 99.8628 13.24C97.7428 13.24 96.5828 14.68 96.4628 16.16L91.1828 15.08C91.4228 12.24 94.0628 8.48 99.9028 8.48C106.343 8.48 108.703 12.08 108.703 16.16V25.88C108.703 27.44 108.903 28.76 108.943 28.96H103.463C103.423 28.8 103.263 28.08 103.263 26.72C102.223 28.4 100.303 29.52 97.6628 29.52C93.3028 29.52 90.7828 26.64 90.7828 23.48ZM99.1428 25.12C100.943 25.12 102.783 24.24 102.783 21.16V20.28L99.0228 20.88C97.7428 21.08 96.7828 21.68 96.7828 23.08C96.7828 24.12 97.4628 25.12 99.1428 25.12Z" fill="currentColor"/>
+    </svg>
+  </header>
+
+  <!-- 404 / Select view -->
+  <main class="view select active" id="viewSelect">
+    <h1 class="title404">404</h1>
+
+    <p class="subtitle">
+      Looks like you’ve wandered off the map. While our advisors find the right path for you, why not help us expand the skyline?
+    </p>
+
+    <div class="towerTitle">Choose Your Tower</div>
+
+    <section class="cards" aria-label="Choose level">
+      <button class="card" data-level="arab" aria-label="Burj Al Arab (Easy)">
+        <div class="iconWrap">
+          <svg width="110" height="150" viewBox="0 0 180 280" fill="none" aria-hidden="true">
+            <rect x="20" y="250" width="140" height="30" rx="6" fill="#181818" opacity="0.20" />
+            <rect x="30" y="225" width="120" height="30" rx="5" fill="#181818" opacity="0.18" />
+            <rect x="33" y="198" width="114" height="30" rx="5" fill="#181818" opacity="0.16" />
+            <rect x="36" y="171" width="108" height="30" rx="5" fill="#181818" opacity="0.15" />
+            <rect x="40" y="145" width="100" height="30" rx="5" fill="#181818" opacity="0.14" />
+            <rect x="44" y="119" width="92" height="30" rx="4" fill="#181818" opacity="0.13" />
+            <rect x="48" y="95" width="84" height="28" rx="4" fill="#181818" opacity="0.12" />
+            <rect x="53" y="72" width="74" height="27" rx="4" fill="#181818" opacity="0.11" />
+            <rect x="58" y="50" width="64" height="26" rx="4" fill="#181818" opacity="0.10" />
+            <rect x="64" y="30" width="52" height="24" rx="3" fill="#181818" opacity="0.09" />
+            <rect x="70" y="12" width="40" height="22" rx="3" fill="#181818" opacity="0.08" />
+            <rect x="77" y="0" width="26" height="16" rx="3" fill="#181818" opacity="0.07" />
+            <circle cx="90" cy="8" r="6" fill="#181818" opacity="0.06" />
+          </svg>
+        </div>
+
+        <div class="badge" style="background:#d9ecc6;color:#012900;">Easy</div>
+        <h3 class="cardTitle">Burj Al Arab</h3>
+        <p class="cardMeta">Wide blocks · Slow · 14 floors</p>
+      </button>
+
+      <button class="card" data-level="frame" aria-label="Dubai Frame (Medium)">
+        <div class="iconWrap">
+          <svg width="72" height="150" viewBox="0 0 100 240" fill="none" aria-hidden="true">
+            <rect x="10" y="0" width="20" height="220" rx="4" fill="#181818" opacity="0.14" />
+            <rect x="70" y="0" width="20" height="220" rx="4" fill="#181818" opacity="0.14" />
+            <rect x="5" y="0" width="90" height="30" rx="5" fill="#181818" opacity="0.16" />
+            <rect x="28" y="30" width="44" height="14" rx="3" fill="#181818" opacity="0.10" />
+            <rect x="0" y="220" width="100" height="20" rx="5" fill="#181818" opacity="0.18" />
+            <g opacity="0.20">
+              <rect x="16" y="40" width="6" height="4" fill="#181818" />
+              <rect x="77" y="40" width="6" height="4" fill="#181818" />
+              <rect x="16" y="65" width="6" height="4" fill="#181818" />
+              <rect x="77" y="65" width="6" height="4" fill="#181818" />
+              <rect x="16" y="90" width="6" height="4" fill="#181818" />
+              <rect x="77" y="90" width="6" height="4" fill="#181818" />
+              <rect x="16" y="115" width="6" height="4" fill="#181818" />
+              <rect x="77" y="115" width="6" height="4" fill="#181818" />
+              <rect x="16" y="140" width="6" height="4" fill="#181818" />
+              <rect x="77" y="140" width="6" height="4" fill="#181818" />
+              <rect x="16" y="165" width="6" height="4" fill="#181818" />
+              <rect x="77" y="165" width="6" height="4" fill="#181818" />
+              <rect x="16" y="190" width="6" height="4" fill="#181818" />
+              <rect x="77" y="190" width="6" height="4" fill="#181818" />
+            </g>
+            <rect x="30" y="50" width="40" height="160" rx="2" fill="#181818" opacity="0.06" />
+          </svg>
+        </div>
+
+        <div class="badge" style="background:rgba(212,160,23,0.15);color:#d4a017;">Medium</div>
+        <h3 class="cardTitle">Dubai Frame</h3>
+        <p class="cardMeta">Mid blocks · Moderate · 18 floors</p>
+      </button>
+
+      <button class="card" data-level="khalifa" aria-label="Burj Khalifa (Hard)">
+        <div class="iconWrap">
+          <svg width="40" height="150" viewBox="0 0 70 320" fill="none" aria-hidden="true">
+            <rect x="10" y="280" width="50" height="40" rx="4" fill="#181818" opacity="0.18" />
+            <rect x="13" y="260" width="44" height="24" rx="3" fill="#181818" opacity="0.16" />
+            <rect x="15" y="240" width="40" height="24" rx="3" fill="#181818" opacity="0.15" />
+            <rect x="17" y="218" width="36" height="26" rx="3" fill="#181818" opacity="0.14" />
+            <rect x="19" y="196" width="32" height="26" rx="3" fill="#181818" opacity="0.13" />
+            <rect x="20" y="174" width="30" height="26" rx="2" fill="#181818" opacity="0.12" />
+            <rect x="21" y="152" width="28" height="26" rx="2" fill="#181818" opacity="0.11" />
+            <rect x="23" y="132" width="24" height="24" rx="2" fill="#181818" opacity="0.10" />
+            <rect x="24" y="112" width="22" height="24" rx="2" fill="#181818" opacity="0.09" />
+            <rect x="26" y="94" width="18" height="22" rx="2" fill="#181818" opacity="0.085" />
+            <rect x="27" y="76" width="16" height="22" rx="2" fill="#181818" opacity="0.08" />
+            <rect x="28" y="58" width="14" height="22" rx="2" fill="#181818" opacity="0.075" />
+            <rect x="29" y="42" width="12" height="20" rx="2" fill="#181818" opacity="0.07" />
+            <rect x="30" y="26" width="10" height="20" rx="2" fill="#181818" opacity="0.065" />
+            <rect x="31" y="10" width="8" height="20" rx="1" fill="#181818" opacity="0.06" />
+            <rect x="33" y="0" width="4" height="14" rx="1" fill="#181818" opacity="0.055" />
+          </svg>
+        </div>
+
+        <div class="badge" style="background:rgba(255,141,40,0.15);color:#ff8d28;">Hard</div>
+        <h3 class="cardTitle">Burj Khalifa</h3>
+        <p class="cardMeta">Narrow blocks · Fast · 22 floors</p>
+      </button>
+    </section>
+
+    <div class="footerRow">
+      <button class="btnPrimary" id="goHomeBtn" type="button">Go Home</button>
+      <p class="footerHint">or pick a tower</p>
+    </div>
+  </main>
+
+  <!-- Game view -->
+  <main class="view game" id="viewGame">
+    <div class="gameStage">
+      <div class="panel">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD -->
+        <div class="hud">
+          <div class="hudLeft">
+            <div class="hudChip">Floors: <b id="hudFloors">0</b>/<span id="hudTarget">0</span></div>
+            <div class="hudChip">Perfect: <b id="hudPerfect">0</b></div>
+          </div>
+          <div class="hudRight">
+            <div class="hudChip">Drop: space / click / tap</div>
+          </div>
+        </div>
+
+        <!-- Back in bottom-right -->
+        <button class="backBtn" id="backBtn" type="button" aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
+
+        <div class="overlay" id="overlay">
+          <div class="modal">
+            <h2 id="overlayTitle">—</h2>
+            <p id="overlayText">—</p>
+            <div class="row">
+              <button class="btnPrimary" id="restartBtn" type="button">Play Again</button>
+              <button class="btnPrimary" id="pickBtn" type="button">Pick Another Tower</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ---------------------------
+    // Levels
+    // ---------------------------
+    const LEVELS = {
+      arab:    { name: "Burj Al Arab",  target: 14, speed: 120, startW: 240, minW: 90  },
+      frame:   { name: "Dubai Frame",   target: 18, speed: 180, startW: 200, minW: 70  },
+      khalifa: { name: "Burj Khalifa",  target: 22, speed: 260, startW: 160, minW: 55  },
+    };
+
+    // ---------------------------
+    // DOM
+    // ---------------------------
+    const viewSelect = document.getElementById("viewSelect");
+    const viewGame   = document.getElementById("viewGame");
+    const goHomeBtn  = document.getElementById("goHomeBtn");
+    const backBtn    = document.getElementById("backBtn");
+
+    const hudFloors  = document.getElementById("hudFloors");
+    const hudTarget  = document.getElementById("hudTarget");
+    const hudPerfect = document.getElementById("hudPerfect");
+
+    const overlay      = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayText  = document.getElementById("overlayText");
+    const restartBtn   = document.getElementById("restartBtn");
+    const pickBtn      = document.getElementById("pickBtn");
+
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // ---------------------------
+    // Canvas sizing (retina)
+    // ---------------------------
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      draw();
+    });
+
+    // ---------------------------
+    // Game state
+    // ---------------------------
+    let currentLevelKey = null;
+    let level = null;
+
+    const G = {
+      running: false,
+      over: false,
+      win: false,
+
+      perfect: 0,
+
+      blocks: [],
+      moving: null,
+      lastTime: 0,
+
+      camY: 0,
+    };
+
+    function updateHUD() {
+      hudTarget.textContent = level ? String(level.target) : "0";
+      hudFloors.textContent = String(Math.max(0, G.blocks.length - 1));
+      hudPerfect.textContent = String(G.perfect);
+    }
+
+    function resetGame() {
+      G.running = true;
+      G.over = false;
+      G.win = false;
+
+      G.perfect = 0;
+
+      G.blocks = [];
+      G.moving = null;
+      G.lastTime = performance.now();
+      G.camY = 0;
+
+      const panel = canvas.getBoundingClientRect();
+      const W = panel.width;
+      const H = panel.height;
+
+      const blockH = 26;
+      const baseW = Math.min(level.startW, W * 0.72);
+      const baseX = (W - baseW) / 2;
+      const baseY = H - 70;
+
+      G.blocks.push({ x: baseX, y: baseY, w: baseW, h: blockH });
+      spawnMovingBlock();
+      hideOverlay();
+      updateHUD();
+      requestAnimationFrame(loop);
+    }
+
+    function spawnMovingBlock() {
+      const top = G.blocks[G.blocks.length - 1];
+      const panel = canvas.getBoundingClientRect();
+      const W = panel.width;
+
+      const h = top.h;
+      const y = top.y - h - 8;
+
+      const decay = Math.max(0, (G.blocks.length - 1) * 4);
+      const w = Math.max(level.minW, top.w - decay);
+
+      const startX = 16;
+      G.moving = { x: startX, y, w, h, dir: 1 };
+    }
+
+    function drop() {
+      if (!G.running || G.over || !G.moving) return;
+
+      const top = G.blocks[G.blocks.length - 1];
+      const m = G.moving;
+
+      const left = Math.max(top.x, m.x);
+      const right = Math.min(top.x + top.w, m.x + m.w);
+      const overlap = right - left;
+
+      if (overlap <= 0) {
+        endGame(false);
+        return;
+      }
+
+      // perfect if centers align within tolerance
+      const tol = 6;
+      const delta = Math.abs((m.x + m.w/2) - (top.x + top.w/2));
+      if (delta <= tol) G.perfect += 1;
+
+      const newBlock = { x: left, y: m.y, w: overlap, h: m.h };
+      G.blocks.push(newBlock);
+      G.moving = null;
+
+      updateHUD();
+
+      const floorsBuilt = G.blocks.length - 1;
+      if (floorsBuilt >= level.target) {
+        endGame(true);
+        return;
+      }
+
+      spawnMovingBlock();
+    }
+
+    function endGame(win) {
+      G.running = false;
+      G.over = true;
+      G.win = !!win;
+
+      overlayTitle.textContent = win ? "Tower Completed" : "It fell";
+      overlayText.textContent = win
+        ? `You built ${level.target} floors. Perfect: ${G.perfect}.`
+        : `Floors: ${Math.max(0, G.blocks.length - 1)}. Perfect: ${G.perfect}.`;
+
+      // Pick button: primary on win, underlined text on lose
+      if (win) {
+        pickBtn.classList.remove("btnLink");
+        pickBtn.classList.add("btnPrimary");
+      } else {
+        pickBtn.classList.remove("btnPrimary");
+        pickBtn.classList.add("btnLink");
+      }
+
+      showOverlay();
+      draw();
+    }
+
+    // ---------------------------
+    // Render
+    // ---------------------------
+    function clear() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+    }
+
+    function drawBackground() {
+      const rect = canvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+
+      const grad = ctx.createLinearGradient(0, 0, 0, H);
+      grad.addColorStop(0, "rgba(197,255,91,0.05)");
+      grad.addColorStop(1, "rgba(1,41,0,0.00)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      const haze = ctx.createRadialGradient(W/2, H-40, 10, W/2, H-40, Math.min(W, 700));
+      haze.addColorStop(0, "rgba(197,255,91,0.10)");
+      haze.addColorStop(1, "rgba(197,255,91,0.0)");
+      ctx.fillStyle = haze;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function blockFill(index, isMoving) {
+      const shades = ["rgba(197,255,91,0.92)", "rgba(179,238,74,0.88)", "rgba(161,221,57,0.84)"];
+      const s = shades[index % shades.length];
+      return isMoving ? "rgba(197,255,91,0.78)" : s;
+    }
+
+    function drawBlocks() {
+      const rect = canvas.getBoundingClientRect();
+      const W = rect.width, H = rect.height;
+
+      // CAMERA: bottom anchored until tower gets high, then smooth upward movement
+      const desiredTop = 120;
+      const topBlock = G.blocks[G.blocks.length - 1];
+      const towerTopY = topBlock ? topBlock.y : (H - 70);
+
+      const targetCam = Math.max(0, desiredTop - towerTopY);
+      G.camY += (targetCam - G.camY) * 0.12;
+
+      ctx.save();
+      ctx.translate(0, G.camY);
+
+      for (let i = 0; i < G.blocks.length; i++) {
+        const b = G.blocks[i];
+        ctx.fillStyle = blockFill(i, false);
+        roundRect(ctx, b.x, b.y, b.w, b.h, 10);
+        ctx.fill();
+      }
+
+      if (G.moving) {
+        const m = G.moving;
+        ctx.fillStyle = blockFill(G.blocks.length, true);
+        roundRect(ctx, m.x, m.y, m.w, m.h, 10);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    function draw() {
+      clear();
+      drawBackground();
+      if (!level) return;
+      drawBlocks();
+    }
+
+    function loop(t) {
+      if (!G.running || G.over) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const W = rect.width;
+
+      const dt = Math.min(0.032, (t - G.lastTime) / 1000);
+      G.lastTime = t;
+
+      if (G.moving) {
+        const m = G.moving;
+        m.x += m.dir * level.speed * dt;
+
+        const pad = 14;
+        if (m.x <= pad) { m.x = pad; m.dir = 1; }
+        if (m.x + m.w >= W - pad) { m.x = (W - pad) - m.w; m.dir = -1; }
+      }
+
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    // ---------------------------
+    // Helpers
+    // ---------------------------
+    function roundRect(ctx, x, y, w, h, r) {
+      const rr = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x + rr, y);
+      ctx.arcTo(x + w, y, x + w, y + h, rr);
+      ctx.arcTo(x + w, y + h, x, y + h, rr);
+      ctx.arcTo(x, y + h, x, y, rr);
+      ctx.arcTo(x, y, x + w, y, rr);
+      ctx.closePath();
+    }
+
+    function showOverlay(){ overlay.classList.add("show"); }
+    function hideOverlay(){ overlay.classList.remove("show"); }
+
+    function showSelect() {
+      document.body.classList.remove("game-mode");
+      viewGame.classList.remove("active");
+      viewSelect.classList.add("active");
+      currentLevelKey = null;
+      level = null;
+    }
+
+    function showGame(levelKey) {
+      document.body.classList.add("game-mode");
+      currentLevelKey = levelKey;
+      level = LEVELS[levelKey];
+
+      viewSelect.classList.remove("active");
+      viewGame.classList.add("active");
+
+      resizeCanvas();
+      resetGame();
+    }
+
+    // ---------------------------
+    // Events
+    // ---------------------------
+    document.querySelectorAll(".card").forEach(btn => {
+      btn.addEventListener("click", () => showGame(btn.dataset.level));
+    });
+
+    goHomeBtn.addEventListener("click", () => showSelect());
+    backBtn.addEventListener("click", () => showSelect());
+
+    restartBtn.addEventListener("click", () => {
+      if (!currentLevelKey) return;
+      resizeCanvas();
+      resetGame();
+    });
+
+    pickBtn.addEventListener("click", () => showSelect());
+
+    window.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        drop();
+      }
+      if (e.code === "Escape" && viewGame.classList.contains("active")) {
+        showSelect();
+      }
+    });
+
+    canvas.addEventListener("pointerdown", () => drop());
+
+    // Init
+    resizeCanvas();
+    draw();
+  </script>
+</body>
+</html>
